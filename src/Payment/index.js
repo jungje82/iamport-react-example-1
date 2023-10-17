@@ -4,6 +4,7 @@ import { Form, Select, Icon, Input, Switch, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { withUserAgent } from 'react-useragent';
 import queryString from 'query-string';
+import axios from 'axios';
 
 import {
   PGS,
@@ -24,13 +25,15 @@ function Payment({ history, form, ua }) {
   const [isBizNumRequired, setisBizNumRequired] = useState(false);
   const { getFieldDecorator, validateFieldsAndScroll, setFieldsValue, getFieldsValue } = form;
 
+  const [data, setData] = useState([]);
+
   function handleSubmit(e) {
     e.preventDefault();
     
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         /* 가맹점 식별코드 */
-        const userCode = 'imp19424728';
+        const userCode = 'imp37037061';
         /* 결제 데이터 */
         const {
           pg,
@@ -95,8 +98,20 @@ function Payment({ history, form, ua }) {
   }
 
   function callback(response) {
-    const query = queryString.stringify(response);
-    history.push(`/payment/result?${query}`);
+    // const query = queryString.stringify(response);
+    console.log("request_pay,callback",response);
+    const imp_uid = response.imp_uid;
+    // console.log(query);
+    axios.get("http://localhost:8080/payments/"+imp_uid).then((res)=>{
+      console.log('res',res);
+      // alert("성공");
+
+      response.success = res.data.status == 'paid'?true:false;
+      const query = queryString.stringify(response);
+
+      history.push(`/payment/result?${query}`);
+    });
+    
   }
 
   function onChangePg(value) {

@@ -1,16 +1,14 @@
-import React, {Suspense} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Icon, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
-import Table1 from './components/table';
 
 function PaymentResult({ history }) {
-  console.log('PaymentResult',history);
   const { location } = history;
   const { search } = location;
   const query = queryString.parse(search);
-
+  
   const { merchant_uid, error_msg, imp_uid } = query;
   const isSuccessed = getIsSuccessed();
   function getIsSuccessed() {
@@ -19,19 +17,13 @@ function PaymentResult({ history }) {
     if (typeof imp_success === 'boolean') return imp_success === true;
     if (typeof success === 'string') return success === 'true';
     if (typeof success === 'boolean') return success === true;
-
-    
   }
 
-    const iconType = isSuccessed ? 'check-circle' : 'exclamation-circle';
+  const iconType = isSuccessed ? 'check-circle' : 'exclamation-circle';
   const resultType = isSuccessed ? '성공' : '실패';
   const colorType = isSuccessed ? '#52c41a' : '#f5222d';
-
-  
-
   return (
-    
-      <Wrapper>
+    <Wrapper>
       <Container colorType={colorType}>
         <Icon type={iconType} theme="filled" />
         <p>{`결제에 ${resultType}하였습니다`}</p>
@@ -40,7 +32,7 @@ function PaymentResult({ history }) {
             <span>주문번호</span>
             <span>{merchant_uid}</span>
           </li>
-          {isSuccessed ? (
+          {isSuccessed  ? (
             <li>
               <span>아임포트 번호</span>
               <span>{imp_uid}</span>
@@ -56,9 +48,6 @@ function PaymentResult({ history }) {
           <Icon type="arrow-left" />
           돌아가기
         </Button>
-        <Suspense fallback={<p>Fetching data details...</p>}>
-          <Table1 />
-        </Suspense>
       </Container>
     </Wrapper>
   );

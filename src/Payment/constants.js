@@ -71,6 +71,10 @@ export const PGS = [
     value: 'smilepay',
     label: '스마일페이',
   },
+  {
+    value: 'tosspayments',
+    label: '토스페이먼츠'
+  }
 ];
 
 export const METHODS = [
